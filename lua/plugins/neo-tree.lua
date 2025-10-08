@@ -3,8 +3,8 @@ return {
   opts = {
     filesystem = {
       filtered_items = {
-        hide_dotfiles = false, -- show hidden files (starting with .)
-        hide_gitignored = false, -- show files ignored by .gitignore
+        hide_dotfiles = true, -- show hidden files (starting with .)
+        hide_gitignored = true, -- show files ignored by .gitignore
       },
     },
   },
