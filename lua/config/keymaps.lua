@@ -30,19 +30,23 @@ vim.keymap.set("n", "<leader>Ad", function()
   vim.cmd("normal! ggVGd")
 end, { desc = "Delete all" })
 
--- Resize window with navigation keymaps
-vim.keymap.set("n", "<C-Up>", function()
-  vim.cmd("resize +2")
-end, { desc = "Resize window up" })
+-- Mini map
+vim.keymap.set("n", "<leader>um", function()
+  require("mini.map").toggle()
+end, { desc = "Toggle minimap" })
 
-vim.keymap.set("n", "<C-Down>", function()
-  vim.cmd("resize -2")
-end, { desc = "Resize window down" })
-
-vim.keymap.set("n", "<C-Left>", function()
-  vim.cmd("vertical resize -2")
-end, { desc = "Resize window left" })
-
-vim.keymap.set("n", "<C-Right>", function()
-  vim.cmd("vertical resize +2")
-end, { desc = "Resize window right" })
+-- vim.keymap.set("n", "<C-Up>", function()
+--   vim.cmd("resize +2")
+-- end, { desc = "Resize window up" })
+--
+-- vim.keymap.set("n", "<C-Down>", function()
+--   vim.cmd("resize -2")
+-- end, { desc = "Resize window down" })
+--
+-- vim.keymap.set("n", "<C-Left>", function()
+--   vim.cmd("vertical resize -2")
+-- end, { desc = "Resize window left" })
+--
+-- vim.keymap.set("n", "<C-Right>", function()
+--   vim.cmd("vertical resize +2")
+-- end, { desc = "Resize window right" })

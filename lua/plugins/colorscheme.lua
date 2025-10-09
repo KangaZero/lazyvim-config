@@ -7,11 +7,9 @@ return {
       transparent = true,
     },
   },
-  -- Configure LazyVim to load gruvbox
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "tokyonight",
-    },
+  -- Configure LazyVim to load gruvbox {
+  "LazyVim/LazyVim",
+  opts = {
+    colorscheme = "tokyonight",
   },
 }
