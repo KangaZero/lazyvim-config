@@ -35,6 +35,14 @@ vim.keymap.set("n", "<leader>um", function()
   require("mini.map").toggle()
 end, { desc = "Toggle minimap" })
 
+-- Get current file's directory
+vim.keymap.set("n", "<leader>fd", function()
+  local file_path = vim.fn.expand("%:p")
+  local dir_path = vim.fn.fnamemodify(file_path, ":h")
+  vim.fn.setreg("+", dir_path)
+  print("Directory path copied to clipboard: " .. dir_path)
+end, { desc = "Copy current file's directory to clipboard" })
+
 -- vim.keymap.set("n", "<C-Up>", function()
 --   vim.cmd("resize +2")
 -- end, { desc = "Resize window up" })
