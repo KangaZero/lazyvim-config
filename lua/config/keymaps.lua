@@ -13,7 +13,7 @@ vim.keymap.set("n", "<leader>gg", function()
   vim.cmd("split | terminal lazygit")
 end, { desc = "Open Lazygit" })
 
-vim.keymap.set("n", "<leader>h", Snacks.dashboard.open, { desc = "Home" })
+vim.keymap.set("n", "<leader>h", "<cmd>Dashboard<cr>", { desc = "Home" })
 
 -- Select all options
 vim.keymap.set("n", "<leader>A", function() end, { desc = "Select all options" })
