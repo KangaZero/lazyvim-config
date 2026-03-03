@@ -19,7 +19,8 @@ vim.keymap.set("n", "<leader>h", "<cmd>Dashboard<cr>", { desc = "Home" })
 vim.keymap.set("n", "<leader>A", function() end, { desc = "Select all options" })
 
 vim.keymap.set({ "n", "v" }, "<leader>Ay", function()
-  vim.cmd("normal! ggVGy")
+  vim.cmd("normal! maggyG`a")
+  vim.cmd("delmarks a")
 end, { desc = "Copy all to clipboard" })
 
 vim.keymap.set({ "n", "v" }, "<leader>Aa", function()
@@ -27,8 +28,13 @@ vim.keymap.set({ "n", "v" }, "<leader>Aa", function()
 end, { desc = "Select all" })
 
 vim.keymap.set("n", "<leader>Ad", function()
-  vim.cmd("normal! ggVGd")
+  vim.cmd("normal! ggdG")
 end, { desc = "Delete all" })
+
+-- Blink completion options to show
+vim.keymap.set("i", "<shift>", function()
+  require("blink.cmp").show()
+end, { desc = "Show completion options" })
 
 -- Mini map
 vim.keymap.set("n", "<leader>um", function()
