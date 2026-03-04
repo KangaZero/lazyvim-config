@@ -1,6 +1,8 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
+-- NOTE: wk is purely to add in icons for which-key, can't add the 'icon' property directly to keymap fn
+local wk = require("which-key")
 function KeymapSet(mode, lhs, rhs, opts)
   local options = { noremap = true, silent = true }
   if opts then
@@ -14,25 +16,40 @@ vim.keymap.set("n", "<leader>gg", function()
 end, { desc = "Open Lazygit" })
 
 vim.keymap.set("n", "<leader>h", "<cmd>Dashboard<cr>", { desc = "Home" })
+wk.add({
+  { "<leader>h", icon = "󱣻 " },
+})
 
 -- Select all options
 vim.keymap.set("n", "<leader>A", function() end, { desc = "Select all options" })
+wk.add({
+  { "<leader>A", icon = "󰁁 " },
+})
 
 vim.keymap.set({ "n", "v" }, "<leader>Ay", function()
-  vim.cmd("normal! maggyG`a")
+  vim.cmd("normal! m'ggyG''")
   vim.cmd("delmarks a")
 end, { desc = "Copy all to clipboard" })
+wk.add({
+  { "<leader>Ay", icon = "󰆏 " },
+})
 
 vim.keymap.set({ "n", "v" }, "<leader>Aa", function()
   vim.cmd("normal! ggVG")
 end, { desc = "Select all" })
+wk.add({
+  { "<leader>Aa", icon = "󰒆 " },
+})
 
 vim.keymap.set("n", "<leader>Ad", function()
   vim.cmd("normal! ggdG")
 end, { desc = "Delete all" })
-
+wk.add({
+  { "<leader>Ad", icon = "󰛌 " },
+})
 -- Blink completion options to show
-vim.keymap.set("i", "<shift>", function()
+-- TODO: make this actually work
+vim.keymap.set({ "i", "n" }, "<shift>", function()
   require("blink.cmp").show()
 end, { desc = "Show completion options" })
 
@@ -40,6 +57,9 @@ end, { desc = "Show completion options" })
 vim.keymap.set("n", "<leader>um", function()
   require("mini.map").toggle()
 end, { desc = "Toggle minimap" })
+wk.add({
+  { "<leader>um", icon = " " },
+})
 
 -- Get current file's directory
 vim.keymap.set("n", "<leader>fd", function()
@@ -48,7 +68,17 @@ vim.keymap.set("n", "<leader>fd", function()
   vim.fn.setreg("+", dir_path)
   print("Directory path copied to clipboard: " .. dir_path)
 end, { desc = "Copy current file's directory to clipboard" })
+wk.add({
+  { "<leader>fd", icon = "󰓾 " },
+})
 
+-- Terminal in current buffer's directory
+vim.keymap.set("n", "<leader>t", function()
+  Snacks.terminal(nil, { cwd = vim.fn.expand("%:p:h") })
+end, { desc = "Terminal (current file dir)" })
+wk.add({
+  { "<leader>t", icon = " " },
+})
 -- vim.keymap.set("n", "<C-Up>", function()
 --   vim.cmd("resize +2")
 -- end, { desc = "Resize window up" })
