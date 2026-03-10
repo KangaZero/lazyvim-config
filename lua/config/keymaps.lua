@@ -79,6 +79,21 @@ end, { desc = "Terminal (current file dir)" })
 wk.add({
   { "<leader>t", icon = " " },
 })
+
+-- Move lines up/down
+-- INFO: alt + j/k does not work on Mac
+vim.keymap.set({ "n", "v", "i" }, "<A-j>", "<cmd>m .+1<cr>", { desc = "Move line down" })
+vim.keymap.set({ "n", "v", "i" }, "<A-Down>", "<cmd>m .+1<cr>", { desc = "Move line down" })
+vim.keymap.set({ "n", "v", "i" }, "<A-k>", "<cmd>m .-2<cr>", { desc = "Move line up" })
+vim.keymap.set({ "n", "v", "i" }, "<A-Up>", "<cmd>m .-2<cr>", { desc = "Move line up" })
+
+vim.keymap.set("n", "<leader>P", function()
+  require("minty.huefy").open()
+end, { desc = "Open color picker" })
+wk.add({
+  { "<leader>P", icon = " " },
+})
+
 -- vim.keymap.set("n", "<C-Up>", function()
 --   vim.cmd("resize +2")
 -- end, { desc = "Resize window up" })

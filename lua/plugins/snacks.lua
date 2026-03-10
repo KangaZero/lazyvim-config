@@ -35,6 +35,7 @@ return {
         },
       },
     },
+    matcher = { sort_empty = false, fuzzy = true },
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
@@ -89,14 +90,21 @@ return {
       end,
       desc = "Notification History",
     },
+    -- {
+    --   "<leader>e",
+    --   function()
+    --     Snacks.explorer()
+    --   end,
+    --   desc = "File Explorer",
+    -- },
+    -- find
     {
       "<leader>e",
       function()
-        Snacks.explorer()
+        Snacks.explorer({ cwd = vim.fn.expand("%:p:h") })
       end,
-      desc = "File Explorer",
+      desc = "Explorer (current file dir)",
     },
-    -- find
     {
       "<leader>fb",
       function()
