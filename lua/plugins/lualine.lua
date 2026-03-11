@@ -18,12 +18,39 @@ return {
 
     local icons = LazyVim.config.icons
 
+    local colors = {
+      blue = "#80a0ff",
+      cyan = "#79dac8",
+      black = "#080808",
+      white = "#c6c6c6",
+      red = "#ff5189",
+      violet = "#c990ff",
+      grey = "#303030",
+    }
+
+    local bubbles_theme = {
+      normal = {
+        a = { fg = colors.black, bg = colors.violet },
+        b = { fg = colors.white, bg = colors.grey },
+        c = { fg = colors.white },
+      },
+
+      insert = { a = { fg = colors.black, bg = colors.blue } },
+      visual = { a = { fg = colors.black, bg = colors.cyan } },
+      replace = { a = { fg = colors.black, bg = colors.red } },
+
+      inactive = {
+        a = { fg = colors.white, bg = colors.black },
+        b = { fg = colors.white, bg = colors.black },
+        c = { fg = colors.white },
+      },
+    }
     vim.o.laststatus = vim.g.lualine_laststatus
 
     local opts = {
       options = {
         icons_enabled = true,
-        theme = "auto",
+        theme = bubbles_theme,
         -- component_separators = { left = "", right = "" },
         -- section_separators = { left = "", right = "" },
         globalstatus = vim.o.laststatus == 3,
@@ -31,6 +58,18 @@ return {
       },
       sections = {
         lualine_a = {
+          {
+            function()
+              local os_name = vim.loop.os_uname().sysname
+              local icon = ({
+                Darwin = "", -- macOS
+                Linux = "", -- Linux
+                Windows_NT = "", -- Windows
+              })[os_name] or ""
+              return icon
+            end,
+            separator = "",
+          },
           function()
             local current_mode = require("lualine.utils.mode").get_mode()
             if vim.g.safe then
@@ -45,6 +84,8 @@ return {
                 --NOTE: As far as I have tried, this case will never hit, as going to TERMINAL mode seems to automatically remove vim.g.safe variable, but I will keep it here just in case
               elseif current_mode == "TERMINAL" then
                 return "SAFE-T"
+              elseif current_mode == "O-PENDING" then
+                return "SAFE-OP"
               else
                 return "SAFE"
               end
@@ -52,7 +93,9 @@ return {
             return require("lualine.utils.mode").get_mode()
           end,
         },
-        lualine_b = { "branch" },
+        lualine_b = {
+          "branch",
+        },
 
         lualine_c = {
           LazyVim.lualine.root_dir(),
@@ -114,7 +157,7 @@ return {
           },
         },
         lualine_y = {
-          { "progress", separator = " ", padding = { left = 1, right = 0 } },
+          { "progress", separator = "⌇", padding = { left = 1, right = 0 } },
           { "location", padding = { left = 0, right = 1 } },
         },
         lualine_z = {

@@ -33,12 +33,6 @@ return {
       right_mouse_command = function(n) Snacks.bufdelete(n) end,
       diagnostics = "nvim_lsp",
       always_show_bufferline = false,
-      highlights = {
-        fill = {
-          bg = "NONE",
-          fg = "NONE",
-        },
-      },
       ---@param opts bufferline.IconFetcherOpts
       get_element_icon = function(opts)
         return LazyVim.config.icons.ft[opts.filetype]

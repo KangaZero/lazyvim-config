@@ -23,10 +23,11 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
   nested = true,
 })
 
-vim.api.nvim_create_autocmd({ "CmdwinLeave", "CmdwinEnter" }, {
-  pattern = { "*" },
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
   callback = function()
-    print("Command window toggled")
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#c099ff" })
+    vim.api.nvim_set_hl(0, "LineNr", { fg = "#767676" })
+    vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#767676" })
+    vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#767676" })
   end,
-  nested = true,
 })

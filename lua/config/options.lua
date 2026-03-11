@@ -4,7 +4,7 @@ vim.g.lazyvim_eslint_auto_format = true
 vim.g.lazyvim_mini_snippets_in_completion = true
 -- HACK: Disable mouse support to prevent accidental clicks and to make sure I do things the more efficient way
 vim.opt.mouse = ""
-
+vim.opt.scrolloff = 2 -- add 2 literal blank lines at the bottom and top
 --SPECIAL: safe mode (read-only + navigation)
 vim.g.safe = false
 
@@ -48,8 +48,11 @@ local function toggle_safe_mode()
     return
   end
   vim.g.safe = true
-
-  -- block all editing/deletion keys
+  -- stop any active macro recording before entering safe mode
+  if vim.fn.reg_recording() ~= "" then
+    vim.api.nvim_feedkeys("q", "n", false)
+  end
+  -- block all editing/deletion/macro/comment/paste keys
   local blocked = {
     "i",
     "I",
@@ -63,16 +66,19 @@ local function toggle_safe_mode()
     "c",
     "C",
     "cc", -- change
-    "s",
-    "S", -- substitute
+    -- "s", -- INFO: By default it deletes the character under the cursor and enter insert mode. But I use a plugin called "Flash"
+    -- "S", -- substitute
     "x",
     "X", -- delete char
     "r",
     "R", -- replace
+    "gu",
+    "gU",
+    "gcc", --comment/uncomment
     "p",
     "P", -- paste (mutates buffer)
     "u",
-    "<C-r>", -- undo/redo
+    "<C-r>",
     "<C-a>",
     "<C-x>",
     "~", -- toggle case
@@ -80,6 +86,10 @@ local function toggle_safe_mode()
     "<",
     ">", -- indent
     "J", -- join lines
+    "q", --macros
+    "Q",
+    "@",
+    ".",
   }
   for _, lhs in ipairs(blocked) do
     set_mode_keymap("n", lhs, "<Nop>", "Safe: blocked")
