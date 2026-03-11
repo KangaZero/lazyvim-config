@@ -80,6 +80,12 @@ wk.add({
   { "<leader>t", icon = " " },
 })
 
+--SPECIAL: For custom mode called 'SAFE'
+--NOTE: The actual keymap implementation is in lua/config/options.lua
+wk.add({
+  { "<leader>m", icon = "󰦝 " },
+})
+
 -- Move lines up/down
 -- INFO: alt + j/k does not work on Mac
 vim.keymap.set({ "n", "v", "i" }, "<A-j>", "<cmd>m .+1<cr>", { desc = "Move line down" })
@@ -87,13 +93,13 @@ vim.keymap.set({ "n", "v", "i" }, "<A-Down>", "<cmd>m .+1<cr>", { desc = "Move l
 vim.keymap.set({ "n", "v", "i" }, "<A-k>", "<cmd>m .-2<cr>", { desc = "Move line up" })
 vim.keymap.set({ "n", "v", "i" }, "<A-Up>", "<cmd>m .-2<cr>", { desc = "Move line up" })
 
-vim.keymap.set("n", "<leader>P", function()
-  require("minty.huefy").open()
-end, { desc = "Open color picker" })
-wk.add({
-  { "<leader>P", icon = " " },
-})
-
+--WARNING: Disabling minty as it is not keyboard friendly
+-- require("minty.huefy").open()
+-- vim.keymap.set("n", "<leader>P", function() end, { desc = "Open color picker" })
+-- wk.add({
+--   { "<leader>P", icon = " " },
+-- })
+--
 -- vim.keymap.set("n", "<C-Up>", function()
 --   vim.cmd("resize +2")
 -- end, { desc = "Resize window up" })
