@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    -- load the config defaults/runtime from this repo
+    -- load the core runtime from this repo
     { import = "config.plugins" },
     -- load/override with your plugins last so local config always wins
     { import = "plugins" },

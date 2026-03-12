@@ -15,10 +15,10 @@ local defaults = {
   end,
   -- load the default settings
   defaults = {
-    autocmds = true, -- config.defaults.autocmds
-    keymaps = true, -- config.defaults.keymaps
-    -- config.defaults.options can't be configured here since that's loaded before setup
-    -- if you want to disable loading options, add `package.loaded["config.defaults.options"] = true` to the top of your init.lua
+    autocmds = true, -- config.autocmds
+    keymaps = true, -- config.keymaps
+    -- config.options can't be configured here since that's loaded before setup
+    -- if you want to disable loading options, add `package.loaded["config.options"] = true` to the top of your init.lua
   },
   news = {
     -- When enabled, NEWS.md will be shown when changed.
@@ -292,12 +292,9 @@ function M.load(name)
     end
   end
   local pattern = "LazyVim" .. name:sub(1, 1):upper() .. name:sub(2)
-  -- always load defaults, then user file
   if M.defaults[name] or name == "options" then
-    _load("config.defaults." .. name)
-    vim.api.nvim_exec_autocmds("User", { pattern = pattern .. "Defaults", modeline = false })
+    _load("config." .. name)
   end
-  _load("config." .. name)
   if vim.bo.filetype == "lazy" then
     -- HACK: LazyVim may have overwritten options of the Lazy ui, so reset this here
     vim.cmd([[do VimResized]])

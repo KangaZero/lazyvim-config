@@ -1,229 +1,233 @@
 # Neovim config
 
-This repository is a self-contained Neovim setup.
+This repo is a self-contained Neovim setup with a monolith runtime layout.
 
-It keeps `lazy.nvim` as the plugin manager, but it does **not** depend on the upstream LazyVim distro at runtime. The pinned logic that used to live in a separate vendor folder has been flattened into this repo under `lua/config/`, so copying this directory to another machine keeps the same behavior.
+It keeps `lazy.nvim` as the plugin manager, but the config logic itself lives in this repo. There is no external distro dependency and there is no duplicate `defaults/` runtime layer anymore for options, keymaps, or autocmds.
 
-## Goals
+## What this means
 
-- Keep everything inside `~/.config/nvim`
-- Keep plugin management with `lazy.nvim`
-- Keep current behavior stable and portable
-- Make local overrides win over the pinned baseline
-- Keep the layout understandable without needing to inspect upstream projects
+- everything important lives in `~/.config/nvim`
+- runtime config is monolithic
+- your personal behavior is already the final behavior in the main files
+- plugin management is still modular enough to be maintainable
+
+The monolith part specifically means these are now single files:
+
+- `lua/config/options.lua`
+- `lua/config/keymaps.lua`
+- `lua/config/autocmds.lua`
+
+Each of those files contains the baseline behavior first, then your overrides later in the same file so your settings win without needing a second duplicate runtime file.
 
 ## Setup
 
-### 1. Prerequisites
+### Requirements
 
 Install:
 
 - Neovim `>= 0.11.2`
 - `git`
-- `ripgrep` (`rg`)
+- `ripgrep`
 
-Recommended tools because parts of the config use them directly:
+Recommended because this config uses them directly or benefits from them:
 
 - `lazygit`
-- language servers / formatters / linters you want to use
-- any Mason-managed tools you expect this config to install automatically
+- Mason-managed tools you want for LSP / formatting / linting
+- external language servers, formatters, and linters you personally use
 
-### 2. Install the config
+### Install location
 
-Clone or copy this repo to:
+Put this repo at:
 
 ```bash
 ~/.config/nvim
 ```
 
-### 3. First launch
+### First boot
 
-Open Neovim:
+Start Neovim:
 
 ```bash
 nvim
 ```
 
-On first start:
+On first launch:
 
 - `lazy.nvim` bootstraps itself if missing
-- plugin specs are resolved
-- plugins are installed from `lazy-lock.json`
-- the pinned core config is loaded
-- your local overrides are applied on top
+- plugin specs are read
+- plugins are installed using `lazy-lock.json`
+- the runtime config is loaded from `lua/config/`
+- your plugin overrides from `lua/plugins/` are applied after the core plugin specs
 
-### 4. Optional sync/update
+### Useful commands
 
-Inside Neovim:
+- `:Lazy` to inspect plugins
+- `:Lazy sync` to install or sync plugins
+- `:checkhealth` to inspect environment issues
 
-- run `:Lazy` to inspect plugins
-- run `:Lazy sync` to install/update according to your config
-- run `:checkhealth` if something looks off
+## Structure
 
-## How this config is organized
+## Entry point
 
 ### `init.lua`
 
-The entrypoint. It only boots the main loader:
+This only starts the main loader:
 
-- `require("config.lazy")`
+```lua
+require("config.lazy")
+```
 
 ### `lua/config/lazy.lua`
 
-This is the `lazy.nvim` bootstrap and import order.
-
-It does two important things:
+This file:
 
 - bootstraps `lazy.nvim`
-- loads `config.plugins` first and `plugins` second
+- imports `config.plugins`
+- imports `plugins`
 
-That order is the main reason your own settings win:
+Load order matters:
 
-1. `config.plugins` loads the pinned baseline plugin specs
-2. `plugins` loads your personal plugin specs and overrides after that
+1. `config.plugins` loads the core plugin specs
+2. `plugins` loads your overrides after them
 
-Later specs merge into earlier ones, so your `lua/plugins/*.lua` changes take priority.
+That is why your plugin config still has priority.
+
+## Runtime config
 
 ### `lua/config/init.lua`
 
-This is the runtime coordinator for the flattened core logic.
+This is the runtime coordinator.
 
 It is responsible for:
 
-- setting up the shared `LazyVim` compatibility global used throughout the config
-- loading default runtime files
-- loading your personal runtime files after the defaults
-- setting colorscheme and shared config state
-- handling extra-module bookkeeping from `lazyvim.json`
+- setting up the shared compatibility helper object used across the config
+- loading `options.lua`
+- loading `autocmds.lua`
+- loading `keymaps.lua`
+- loading colorscheme setup and shared state
+- handling extras from `lazyvim.json`
 
-Even though the internal helper object is still called `LazyVim` in code, it is now local to this repo and backed by `lua/config/*`.
-
-### `lua/config/defaults/`
-
-This is the pinned baseline behavior that used to live in the separate vendored runtime.
-
-Files here are loaded first:
-
-- `options.lua`
-- `keymaps.lua`
-- `autocmds.lua`
-
-Think of this folder as the baseline you want to keep stable across machines.
+Even though the internal helper is still called `LazyVim` in code, it now points to code inside this repo.
 
 ### `lua/config/options.lua`
 
-Your personal option overrides.
+Single monolith file for options and related runtime globals.
 
-Load order:
+This file now contains:
 
-1. `lua/config/defaults/options.lua`
-2. `lua/config/options.lua`
+- baseline option defaults
+- runtime globals
+- your personal option overrides
+- your SAFE mode logic
 
-So if the same option is set in both places, **your** value wins.
+If the same option appears more than once in this file, the lower definition wins.
 
 ### `lua/config/keymaps.lua`
 
-Your personal keymaps and keymap overrides.
+Single monolith file for keymaps.
 
-Load order:
+This file now contains:
 
-1. `lua/config/defaults/keymaps.lua`
-2. `lua/config/keymaps.lua`
+- baseline keymaps first
+- the `LazyVimKeymapsDefaults` user event for compatibility
+- your custom keymaps after that
 
-So this is the right place to replace or add behavior without editing the pinned baseline.
+That means your mappings override the earlier baseline mappings when they overlap.
 
 ### `lua/config/autocmds.lua`
 
-Your personal autocmds and autocmd overrides.
+Single monolith file for autocmds.
 
-Load order:
+This file contains:
 
-1. `lua/config/defaults/autocmds.lua`
-2. `lua/config/autocmds.lua`
+- baseline autocmds
+- your custom autocmds after them
+
+So this is the one place to adjust runtime automatic behavior.
+
+## Plugin config
 
 ### `lua/config/plugins/`
 
-Pinned core plugin specs and helper modules.
+This is the core plugin layer that the setup depends on.
 
-This folder contains the baseline plugin logic the config depends on:
+It contains:
 
-- `init.lua`
 - core plugin specs
-- shared extras under `extras/`
-- helper modules under `lsp/`
+- extras under `extras/`
+- plugin helper modules
 
-You usually do **not** need to edit this folder for routine customizations. It is the stable base layer.
+Think of this as the pinned internal plugin runtime.
 
 ### `lua/plugins/`
 
-This is your main customization layer for plugins.
+This is your override layer for plugins.
 
-Use this folder when you want to:
+Use it when you want to:
 
-- override plugin options
-- add new plugins
+- change plugin options
+- add plugins
 - disable plugins
-- replace default mappings or behavior
+- replace default plugin behavior
 
-Because `lua/plugins/` loads after `lua/config/plugins/`, your plugin specs have priority.
+Because it loads after `config.plugins`, your plugin changes win.
 
 ### `lua/config/util/`
 
-Shared utility logic used by the flattened core runtime.
+Shared utility code used by the internal runtime.
 
-Examples:
+This includes helper logic for:
 
-- formatting helpers
-- snippet helpers
+- formatting
+- LSP
+- snippets
 - root detection
-- picker helpers
-- extras handling
-- lualine helpers
+- pickers
+- extras
+- lualine
 
-This is mostly internal infrastructure.
+Most users do not need to touch this often.
+
+## State files
+
+### `lazy-lock.json`
+
+Locks plugin revisions so the same config can reproduce the same plugin versions on another machine.
 
 ### `lazyvim.json`
 
-Despite the filename, this is now just the local extras-state file for this repo.
+Despite the legacy name, this is just the local extras state file for this repo.
 
-It stores enabled extra modules, for example:
+It stores enabled extras such as:
 
 - `config.plugins.extras.lang.typescript`
 - `config.plugins.extras.ui.dashboard-nvim`
 
-The name is legacy, but the contents now point to the flattened `config.plugins.extras.*` namespace.
+## Priority rules
 
-### `lazy-lock.json`
+There are two main priority rules in this repo.
 
-Plugin version lockfile.
+### Runtime priority
 
-This is what makes plugin versions reproducible across machines. If you want the same plugins everywhere, commit this file and keep it in sync with your intended plugin set.
+For options, keymaps, and autocmds:
 
-## Load order and priority
+- baseline logic appears first
+- your custom logic appears later in the same file
 
-This is the most important rule in the repo:
+Later lines win.
 
-### Runtime files
+### Plugin priority
 
-For `options`, `keymaps`, and `autocmds`:
+For plugin specs:
 
-1. `lua/config/defaults/*.lua`
-2. `lua/config/*.lua`
+- `config.plugins` loads first
+- `plugins` loads second
 
-Your local runtime files win.
+Later specs win.
 
-### Plugin specs
+## Where to edit things
 
-For plugins:
-
-1. `config.plugins`
-2. `plugins`
-
-Your local plugin specs win.
-
-## What to edit for common changes
-
-### Change general editor options
+### Change editor options
 
 Edit:
 
@@ -234,11 +238,11 @@ lua/config/options.lua
 Examples:
 
 - line numbers
-- scroll offsets
 - conceal level
-- custom globals
+- scroll offsets
+- runtime globals
 
-### Add or override keymaps
+### Change keymaps
 
 Edit:
 
@@ -248,11 +252,12 @@ lua/config/keymaps.lua
 
 Examples:
 
-- custom leader mappings
-- replacing a default mapping
-- app-specific shortcuts
+- leader mappings
+- navigation keys
+- terminal shortcuts
+- buffer actions
 
-### Add or override autocmds
+### Change autocmds
 
 Edit:
 
@@ -262,9 +267,10 @@ lua/config/autocmds.lua
 
 Examples:
 
-- autosave
-- file reload behavior
-- custom highlighting hooks
+- autosave behavior
+- reload behavior
+- highlight hooks
+- filetype-specific automation
 
 ### Change plugin behavior
 
@@ -276,88 +282,72 @@ lua/plugins/
 
 Examples:
 
-- adjust `snacks.nvim`
-- change LSP settings
-- update completion behavior
-- add or remove UI plugins
+- LSP changes
+- completion changes
+- UI changes
+- adding or removing plugins
 
-### Change the pinned baseline
+### Change the internal core plugin layer
 
 Edit:
 
-- `lua/config/defaults/*`
-- `lua/config/plugins/*`
-- `lua/config/util/*`
+- `lua/config/plugins/`
+- `lua/config/util/`
 
-Do this when you want to change the shared base instead of just overriding it.
-
-## Extras
-
-The config still supports extras, but they now live under:
-
-```lua
-config.plugins.extras.*
-```
-
-The enabled extras are tracked in `lazyvim.json`.
-
-So if you move this repo to another machine, the extras state moves with it too.
+Do this when you want to change the pinned internal base itself, not just override it.
 
 ## Mental model
 
-The easiest way to think about this repo is:
+The easiest way to think about this config is:
 
-- `lua/config/defaults/` = pinned baseline runtime
-- `lua/config/plugins/` = pinned baseline plugin specs
-- `lua/config/util/` = pinned shared helpers
-- `lua/config/*.lua` = your runtime overrides
-- `lua/plugins/*.lua` = your plugin overrides
+- `lua/config/options.lua` = all runtime options
+- `lua/config/keymaps.lua` = all runtime keymaps
+- `lua/config/autocmds.lua` = all runtime autocmds
+- `lua/config/plugins/` = core plugin layer
+- `lua/plugins/` = your plugin overrides
 
-If you want to customize behavior without disturbing the base, edit the local override layers:
+So the runtime side is monolithic, while the plugin side stays modular.
 
-- `lua/config/options.lua`
-- `lua/config/keymaps.lua`
-- `lua/config/autocmds.lua`
-- `lua/plugins/*`
+## Why it is built this way
 
-## Why this layout exists
+This layout gives you:
 
-This setup was flattened on purpose so:
+- one obvious place for options
+- one obvious place for keymaps
+- one obvious place for autocmds
+- no duplicate runtime files
+- portable behavior across machines
+- local overrides that stay authoritative
 
-- you do not depend on upstream distro updates
-- you can move the folder to another machine and keep behavior the same
-- everything important is visible inside one config tree
-- your custom config remains the final authority
+## Troubleshooting
 
-## Quick troubleshooting
-
-### Neovim will not start
+### Neovim does not start
 
 Check:
 
-- Neovim version is at least `0.11.2`
+- Neovim version is `>= 0.11.2`
 - `git` is installed
-- `lazy.nvim` can be cloned on first boot
+- the machine can bootstrap `lazy.nvim`
 
-Then run:
+Then test:
 
 ```bash
 nvim --headless '+qa'
 ```
 
-### Plugins feel out of date or missing
+### Plugins are missing or stale
 
-Open Neovim and run:
+Run:
 
 ```vim
 :Lazy sync
 ```
 
-### A change does not seem to apply
+### A change does not apply
 
-Remember the priority model:
+Use the right layer:
 
-- runtime overrides belong in `lua/config/*.lua`
-- plugin overrides belong in `lua/plugins/*.lua`
+- runtime behavior: `lua/config/options.lua`, `keymaps.lua`, `autocmds.lua`
+- plugin behavior: `lua/plugins/`
 
-If you edit the pinned baseline instead of the override layer, that is fine, but you are changing the shared base rather than just your local preference.
+If you change `lua/config/plugins/`, you are changing the internal base layer itself.

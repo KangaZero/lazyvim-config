@@ -1,6 +1,6 @@
 -- Autocmds are automatically loaded on the VeryLazy event.
--- The pinned baseline lives in `lua/config/defaults/autocmds.lua`,
--- then this file applies personal overrides and additions.
+-- This is the single monolith autocmds file for the runtime layer.
+-- Baseline behavior appears first and personal additions appear later.
 --
 -- Add any additional autocmds here
 -- with `vim.api.nvim_create_autocmd`
