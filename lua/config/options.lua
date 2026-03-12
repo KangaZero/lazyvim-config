@@ -1,5 +1,6 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- Options are automatically loaded before lazy.nvim startup.
+-- The pinned baseline lives in `lua/config/defaults/options.lua`,
+-- then this file applies personal overrides.
 vim.g.lazyvim_eslint_auto_format = true
 vim.g.lazyvim_mini_snippets_in_completion = true
 vim.opt.scrolloff = 2 -- add 2 literal blank lines at the bottom and top

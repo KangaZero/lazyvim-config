@@ -1,5 +1,6 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Keymaps are automatically loaded on the VeryLazy event.
+-- The pinned baseline lives in `lua/config/defaults/keymaps.lua`,
+-- then this file applies personal overrides and additions.
 -- Add any additional keymaps here
 -- NOTE: wk is purely to add in icons for which-key, can't add the 'icon' property directly to keymap fn
 local wk = require("which-key")
