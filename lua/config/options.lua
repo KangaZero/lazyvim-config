@@ -5,6 +5,7 @@ vim.g.lazyvim_mini_snippets_in_completion = true
 -- HACK: Disable mouse support to prevent accidental clicks and to make sure I do things the more efficient way
 vim.opt.mouse = ""
 vim.opt.scrolloff = 2 -- add 2 literal blank lines at the bottom and top
+vim.opt.conceallevel = 0 -- show hidden lines in files like md
 --SPECIAL: safe mode (read-only + navigation)
 vim.g.safe = false
 
@@ -30,11 +31,12 @@ local function set_mode_keymap(mode, lhs, rhs, desc)
   end
 end
 
-local function exit_safe_mode()
+function exit_safe_mode()
   if not vim.g.safe then
     return
   end
   vim.g.safe = false
+  vim.bo.modifiable = true
   for _, entry in ipairs(mode_keymaps) do
     pcall(vim.keymap.del, entry.mode, entry.lhs, { buffer = 0 })
   end
@@ -47,6 +49,7 @@ local function toggle_safe_mode()
     exit_safe_mode()
     return
   end
+  vim.bo.modifiable = false
   vim.g.safe = true
   -- stop any active macro recording before entering safe mode
   if vim.fn.reg_recording() ~= "" then
@@ -90,6 +93,12 @@ local function toggle_safe_mode()
     "Q",
     "@",
     ".",
+    "<leader>ca", -- code actions
+    "<leader>cA", -- code actions
+    "<leader>cr", -- rename actions
+    "<leader>cR", -- rename actions
+    "<leader>cf", -- format actions
+    "<leader>cF", -- format actions
   }
   for _, lhs in ipairs(blocked) do
     set_mode_keymap("n", lhs, "<Nop>", "Safe: blocked")
