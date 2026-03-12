@@ -2,32 +2,28 @@
 
 This repo is a self-contained Neovim setup with a monolith runtime layout and a single top-level plugin tree.
 
-It keeps `lazy.nvim` as the plugin manager, but the config logic itself lives in this repo. There is no external distro dependency and there is no duplicate `defaults/` runtime layer anymore for options, keymaps, or autocmds.
-
-## What this means
-
-- everything important lives in `~/.config/nvim`
-- runtime config is monolithic
-- your personal behavior is already the final behavior in the main files
-- plugin management is still modular enough to be maintainable
-
-The monolith part specifically means these are now single files:
-
-- `lua/config/options.lua`
-- `lua/config/keymaps.lua`
-- `lua/config/autocmds.lua`
-
-Each of those files contains the baseline behavior first, then your overrides later in the same file so your settings win without needing a second duplicate runtime file.
-
+It keeps `lazy.nvim` as the plugin manager, but the config logic itself lives in this repo. This was originally based off the distro, but its dependencies and logic as been extracted out. The `old` branch still relies on distro updates. But `main` will be a divergent and opinionated fork of the original distro. 
 ## Setup
 
 ### Requirements
 
 Install:
-
-- Neovim `>= 0.11.2`
-- `git`
-- `ripgrep`
+- Neovim >= 0.11.2 (needs to be built with LuaJIT)
+- Git >= 2.19.0 (for partial clones support)
+- a Nerd Font(v3.0 or greater) (optional, but needed to display some icons)
+- lazygit (optional)
+- tree-sitter-cli and a C compiler for nvim-treesitter. See here
+- curl for blink.cmp (completion engine)
+- for fzf-lua (optional)
+- fzf: fzf (v0.25.1 or greater)
+- live grep: ripgrep
+- find files: fd
+- a terminal that support true color and undercurl:
+- kitty (Linux & Macos)
+- wezterm (Linux, Macos & Windows)
+- alacritty (Linux, Macos & Windows)
+- iterm2 (Macos)
+- ghostty (Linux, Macos & Windows)
 
 Recommended because this config uses them directly or benefits from them:
 
@@ -64,6 +60,42 @@ On first launch:
 - `:Lazy` to inspect plugins
 - `:Lazy sync` to install or sync plugins
 - `:checkhealth` to inspect environment issues
+
+### Compare against upstream LazyVim
+
+This repo includes:
+
+```bash
+scripts/lazyvim-diff.sh
+```
+
+Use it when you want to compare your flattened or moved files against the original LazyVim distro source.
+
+It knows how to map files like:
+
+- `lua/config/options.lua` -> `lua/lazyvim/config/options.lua`
+- `lua/config/keymaps.lua` -> `lua/lazyvim/config/keymaps.lua`
+- `lua/config/autocmds.lua` -> `lua/lazyvim/config/autocmds.lua`
+- `lua/plugins/core/treesitter.lua` -> `lua/lazyvim/plugins/treesitter.lua`
+- `lua/plugins/nvim-lspconfig.lua` -> `lua/lazyvim/plugins/lsp/init.lua`
+
+Examples:
+
+```bash
+# Compare every tracked file against upstream LazyVim main
+scripts/lazyvim-diff.sh
+
+# Show only the local -> upstream mapping table
+scripts/lazyvim-diff.sh --list
+
+# Compare one specific file
+scripts/lazyvim-diff.sh lua/plugins/core/treesitter.lua
+
+# Use an already-installed local LazyVim checkout instead of fetching
+LAZYVIM_UPSTREAM_DIR="$HOME/.local/share/nvim/lazy/LazyVim" scripts/lazyvim-diff.sh --list
+```
+
+This is useful when you want to inspect what changed from the distro and selectively port upstream updates into your own config.
 
 ## Structure
 

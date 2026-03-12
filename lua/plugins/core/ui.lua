@@ -196,6 +196,18 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+      cmdline = {
+        enabled = true,
+        view = "cmdline_popup", -- floating popup instead of bottom
+        format = {
+          cmdline = { icon = "󰯁 " },
+          search_down = { icon = " " },
+          search_up = { icon = " " },
+          filter = { icon = "󱢖 " },
+          lua = { icon = " " },
+          help = { icon = " " },
+        },
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,

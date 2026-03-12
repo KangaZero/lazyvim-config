@@ -24,7 +24,14 @@ function M.setup()
 end
 
 function M.welcome()
-  LazyVim.info("Welcome to LazyVim!")
+  math.randomseed(os.time())
+  local messages = {
+    "Welcome to HELL!",
+    "You can take a man out of VIM, but never VIM out of a man.",
+    "You really chose VIM? Ok, nerd.",
+    "Do you exactly misspell EMACS?",
+  }
+  LazyVim.info(messages[math.random(#messages)])
 end
 
 function M.changelog()
