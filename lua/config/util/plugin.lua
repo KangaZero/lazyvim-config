@@ -12,22 +12,22 @@ M.lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
 ---@type table<string, string>
 M.deprecated_extras = {
-  ["config.plugins.extras.formatting.conform"] = "`conform.nvim` is now the default **LazyVim** formatter.",
-  ["config.plugins.extras.linting.nvim-lint"] = "`nvim-lint` is now the default **LazyVim** linter.",
-  ["config.plugins.extras.ui.dashboard"] = "`dashboard.nvim` is now the default **LazyVim** starter.",
-  ["config.plugins.extras.coding.native_snippets"] = "Native snippets are now the default for **Neovim >= 0.10**",
-  ["config.plugins.extras.ui.treesitter-rewrite"] = "Disabled `treesitter-rewrite` extra for now. Not ready yet.",
-  ["config.plugins.extras.ui.treesitter-main"] = "the `nvim-treesitter` main branch is now used by default",
-  ["config.plugins.extras.coding.mini-ai"] = "`mini.ai` is now a core LazyVim plugin (again)",
-  ["config.plugins.extras.lazyrc"] = "local spec files are now a lazy.nvim feature",
-  ["config.plugins.extras.editor.trouble-v3"] = "Trouble v3 has been merged in main",
-  ["config.plugins.extras.lang.python-semshi"] = [[The python-semshi extra has been removed,
+  ["plugins.core.extras.formatting.conform"] = "`conform.nvim` is now the default **LazyVim** formatter.",
+  ["plugins.core.extras.linting.nvim-lint"] = "`nvim-lint` is now the default **LazyVim** linter.",
+  ["plugins.core.extras.ui.dashboard"] = "`dashboard.nvim` is now the default **LazyVim** starter.",
+  ["plugins.core.extras.coding.native_snippets"] = "Native snippets are now the default for **Neovim >= 0.10**",
+  ["plugins.core.extras.ui.treesitter-rewrite"] = "Disabled `treesitter-rewrite` extra for now. Not ready yet.",
+  ["plugins.core.extras.ui.treesitter-main"] = "the `nvim-treesitter` main branch is now used by default",
+  ["plugins.core.extras.coding.mini-ai"] = "`mini.ai` is now a core LazyVim plugin (again)",
+  ["plugins.core.extras.lazyrc"] = "local spec files are now a lazy.nvim feature",
+  ["plugins.core.extras.editor.trouble-v3"] = "Trouble v3 has been merged in main",
+  ["plugins.core.extras.lang.python-semshi"] = [[The python-semshi extra has been removed,
   because it's causing too many issues.
   Either use `basedpyright`, or recreate the old extra inside your own config if you still want that behavior.
   ]],
 }
 M.renamed_extras = {
-  ["config.plugins.extras.lang.omnisharp"] = "config.plugins.extras.lang.dotnet",
+  ["plugins.core.extras.lang.omnisharp"] = "plugins.core.extras.lang.dotnet",
 }
 
 M.deprecated_modules = {}
@@ -73,7 +73,7 @@ end
 function M.extra_idx(name)
   local Config = require("lazy.core.config")
   for i, extra in ipairs(Config.spec.modules) do
-    if extra == "config.plugins.extras." .. name then
+    if extra == "plugins.core.extras." .. name then
       return i
     end
   end

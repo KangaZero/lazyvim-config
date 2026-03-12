@@ -7,7 +7,7 @@ return {
   end,
 
   -- depends on the typescript extra
-  { import = "config.plugins.extras.lang.typescript" },
+  { import = "plugins.core.extras.lang.typescript" },
 
   {
     "nvim-treesitter/nvim-treesitter",

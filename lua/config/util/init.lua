@@ -64,7 +64,7 @@ end
 ---@param extra string
 function M.has_extra(extra)
   local Config = require("config")
-  local modname = "config.plugins.extras." .. extra
+  local modname = "plugins.core.extras." .. extra
   local LazyConfig = require("lazy.core.config")
   -- check if it was imported already
   if vim.tbl_contains(LazyConfig.spec.modules, modname) then

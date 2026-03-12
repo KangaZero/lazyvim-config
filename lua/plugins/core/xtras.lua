@@ -1,21 +1,21 @@
 -- Some extras need to be loaded before others
 local prios = {
-  ["config.plugins.extras.test.core"] = 1,
-  ["config.plugins.extras.dap.core"] = 1,
-  ["config.plugins.extras.coding.nvim-cmp"] = 2,
-  ["config.plugins.extras.editor.neo-tree"] = 2,
-  ["config.plugins.extras.ui.edgy"] = 3,
-  ["config.plugins.extras.ai.copilot-native"] = 4,
-  ["config.plugins.extras.coding.blink"] = 5,
-  ["config.plugins.extras.lang.typescript"] = 5,
-  ["config.plugins.extras.formatting.prettier"] = 10,
+  ["plugins.core.extras.test.core"] = 1,
+  ["plugins.core.extras.dap.core"] = 1,
+  ["plugins.core.extras.coding.nvim-cmp"] = 2,
+  ["plugins.core.extras.editor.neo-tree"] = 2,
+  ["plugins.core.extras.ui.edgy"] = 3,
+  ["plugins.core.extras.ai.copilot-native"] = 4,
+  ["plugins.core.extras.coding.blink"] = 5,
+  ["plugins.core.extras.lang.typescript"] = 5,
+  ["plugins.core.extras.formatting.prettier"] = 10,
   -- default core extra priority is 20
   -- default priority is 50
-  ["config.plugins.extras.editor.aerial"] = 100,
-  ["config.plugins.extras.editor.outline"] = 100,
-  ["config.plugins.extras.ui.alpha"] = 19,
-  ["config.plugins.extras.ui.dashboard-nvim"] = 19,
-  ["config.plugins.extras.ui.mini-starter"] = 19,
+  ["plugins.core.extras.editor.aerial"] = 100,
+  ["plugins.core.extras.editor.outline"] = 100,
+  ["plugins.core.extras.ui.alpha"] = 19,
+  ["plugins.core.extras.ui.dashboard-nvim"] = 19,
+  ["plugins.core.extras.ui.mini-starter"] = 19,
 }
 
 if vim.g.xtras_prios then
@@ -63,7 +63,7 @@ extras = LazyVim.dedup(extras)
 
 LazyVim.plugin.save_core()
 if vim.g.vscode then
-  table.insert(extras, 1, "config.plugins.extras.vscode")
+  table.insert(extras, 1, "plugins.core.extras.vscode")
 end
 
 table.sort(extras, function(a, b)

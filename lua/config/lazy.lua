@@ -17,12 +17,12 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     -- load the core runtime from this repo
-    { import = "config.plugins" },
+    { import = "plugins.core" },
     -- load/override with your plugins last so local config always wins
     { import = "plugins" },
-    -- { import = "config.plugins.extras.lang.typescript" },
-    -- { import = "config.plugins.extras.lang.json" },
-    -- { import = "config.plugins.extras.ui.mini-animate" },
+    -- { import = "plugins.core.extras.lang.typescript" },
+    -- { import = "plugins.core.extras.lang.json" },
+    -- { import = "plugins.core.extras.ui.mini-animate" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.

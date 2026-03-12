@@ -24,7 +24,7 @@ return {
   },
 
   -- angularls depends on typescript
-  { import = "config.plugins.extras.lang.typescript" },
+  { import = "plugins.core.extras.lang.typescript" },
 
   -- LSP Servers
   {

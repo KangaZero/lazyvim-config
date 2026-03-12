@@ -1,6 +1,6 @@
 # Neovim config
 
-This repo is a self-contained Neovim setup with a monolith runtime layout.
+This repo is a self-contained Neovim setup with a monolith runtime layout and a single top-level plugin tree.
 
 It keeps `lazy.nvim` as the plugin manager, but the config logic itself lives in this repo. There is no external distro dependency and there is no duplicate `defaults/` runtime layer anymore for options, keymaps, or autocmds.
 
@@ -82,12 +82,12 @@ require("config.lazy")
 This file:
 
 - bootstraps `lazy.nvim`
-- imports `config.plugins`
+- imports `plugins.core`
 - imports `plugins`
 
 Load order matters:
 
-1. `config.plugins` loads the core plugin specs
+1. `plugins.core` loads the internal base plugin specs
 2. `plugins` loads your overrides after them
 
 That is why your plugin config still has priority.
@@ -147,21 +147,16 @@ So this is the one place to adjust runtime automatic behavior.
 
 ## Plugin config
 
-### `lua/config/plugins/`
-
-This is the core plugin layer that the setup depends on.
-
-It contains:
-
-- core plugin specs
-- extras under `extras/`
-- plugin helper modules
-
-Think of this as the pinned internal plugin runtime.
-
 ### `lua/plugins/`
 
-This is your override layer for plugins.
+This is now the only top-level plugin folder.
+
+It contains two layers inside the same tree:
+
+- `lua/plugins/core/` for the internal base plugin specs
+- `lua/plugins/` root files for your custom overrides
+
+The important part is that they now live inside one top-level plugin tree.
 
 Use it when you want to:
 
@@ -170,7 +165,7 @@ Use it when you want to:
 - disable plugins
 - replace default plugin behavior
 
-Because it loads after `config.plugins`, your plugin changes win.
+Because your root `plugins` import loads after `plugins.core`, your plugin changes win.
 
 ### `lua/config/util/`
 
@@ -200,8 +195,8 @@ Despite the legacy name, this is just the local extras state file for this repo.
 
 It stores enabled extras such as:
 
-- `config.plugins.extras.lang.typescript`
-- `config.plugins.extras.ui.dashboard-nvim`
+- `plugins.core.extras.lang.typescript`
+- `plugins.core.extras.ui.dashboard-nvim`
 
 ## Priority rules
 
@@ -220,7 +215,7 @@ Later lines win.
 
 For plugin specs:
 
-- `config.plugins` loads first
+- `plugins.core` loads first
 - `plugins` loads second
 
 Later specs win.
@@ -291,7 +286,7 @@ Examples:
 
 Edit:
 
-- `lua/config/plugins/`
+- `lua/plugins/core/`
 - `lua/config/util/`
 
 Do this when you want to change the pinned internal base itself, not just override it.
@@ -303,8 +298,8 @@ The easiest way to think about this config is:
 - `lua/config/options.lua` = all runtime options
 - `lua/config/keymaps.lua` = all runtime keymaps
 - `lua/config/autocmds.lua` = all runtime autocmds
-- `lua/config/plugins/` = core plugin layer
-- `lua/plugins/` = your plugin overrides
+- `lua/plugins/core/` = internal base plugin layer
+- `lua/plugins/` = your plugin overrides in the same top-level plugin tree
 
 So the runtime side is monolithic, while the plugin side stays modular.
 
@@ -350,4 +345,4 @@ Use the right layer:
 - runtime behavior: `lua/config/options.lua`, `keymaps.lua`, `autocmds.lua`
 - plugin behavior: `lua/plugins/`
 
-If you change `lua/config/plugins/`, you are changing the internal base layer itself.
+If you change `lua/plugins/core/`, you are changing the internal base layer itself.

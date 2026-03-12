@@ -227,14 +227,14 @@ function M.setup(opts)
           end
         end
       end
-      local core_plugins = find("^config%.plugins$")
-      local extras = find("^config%.plugins%.extras%.", true) or core_plugins
+      local core_plugins = find("^plugins%.core$")
+      local extras = find("^plugins%.core%.extras%.", true) or core_plugins
       local plugins = find("^plugins$") or math.huge
       if core_plugins ~= 1 or extras > plugins then
         local msg = {
           "The order of your `lazy.nvim` imports is incorrect:",
-          "- `config.plugins` should be first",
-          "- followed by any `config.plugins.extras`",
+          "- `plugins.core` should be first",
+          "- followed by any `plugins.core.extras`",
           "- and finally your own `plugins`",
           "",
           "If you think you know what you're doing, you can disable this check with:",
@@ -315,8 +315,8 @@ function M.init()
     vim.opt.rtp:append(plugin.dir)
   end
 
-  package.preload["config.plugins.lsp.format"] = function()
-    LazyVim.deprecate([[require("config.plugins.lsp.format")]], [[LazyVim.format]])
+  package.preload["plugins.core.lsp.format"] = function()
+    LazyVim.deprecate([[require("plugins.core.lsp.format")]], [[LazyVim.format]])
     return LazyVim.format
   end
 
@@ -396,7 +396,7 @@ function M.get_defaults()
     origin = use and "extra" or origin
     use = use or valid[1]
     for _, extra in ipairs(check) do
-      local import = "config.plugins.extras." .. extra.extra
+      local import = "plugins.core.extras." .. extra.extra
       extra = vim.deepcopy(extra)
       extra.enabled = extra.name == use
       if extra.enabled then

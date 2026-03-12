@@ -28,7 +28,7 @@ M.buf = 0
 
 ---@type LazyExtraSource[]
 M.sources = {
-  { name = "LazyVim", desc = "LazyVim extras", module = "config.plugins.extras" },
+  { name = "LazyVim", desc = "LazyVim extras", module = "plugins.core.extras" },
   { name = "User", desc = "User extras", module = "plugins.extras" },
 }
 
@@ -293,7 +293,7 @@ function X:extra(extra)
     self.text:append(" "):append(LazyConfig.options.ui.icons.event .. extra.source.name, "LazyReasonEvent")
   end
   for _, import in ipairs(extra.imports) do
-    import = import:gsub("^config.plugins.extras.", "")
+    import = import:gsub("^plugins.core.extras.", "")
     self.text:append(" "):append(LazyConfig.options.ui.icons.plugin .. import, "LazyReasonStart")
   end
   for _, plugin in ipairs(extra.plugins) do
