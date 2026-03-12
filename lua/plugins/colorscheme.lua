@@ -25,7 +25,7 @@ return {
     },
   },
   {
-    "LazyVim/LazyVim",
+    "LazyVim",
     opts = {
       colorscheme = "nekonight-deep-ocean",
       transparent = true,
