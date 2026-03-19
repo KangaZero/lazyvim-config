@@ -79,7 +79,7 @@ return {
       default = { "lsp", "path", "snippets", "buffer", "copilot" },
       providers = {
         lsp = { score_offset = 100 },
-        snippets = { score_offset = 99 },
+        snippets = { score_offset = -100 },
         path = { score_offset = 97 },
         buffer = { score_offset = 95 },
         copilot = { score_offset = 90 },
@@ -107,6 +107,8 @@ return {
     keymap = {
       preset = "enter",
       ["<C-y>"] = { "select_and_accept" },
+      -- VS Code Ctrl+Space equivalent — trigger completion menu manually
+      ["<M-Space>"] = { "show", "fallback" },
     },
   },
   ---@param opts blink.cmp.Config | { sources: { compat: string[] } }

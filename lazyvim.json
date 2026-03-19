@@ -1,5 +1,6 @@
 {
   "extras": [
+    "plugins.core.extras.ai.claudecode",
     "plugins.core.extras.ai.copilot",
     "plugins.core.extras.ai.copilot-chat",
     "plugins.core.extras.ai.sidekick",

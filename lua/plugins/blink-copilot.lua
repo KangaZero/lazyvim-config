@@ -1,5 +1,6 @@
 return {
   "fang2hou/blink-copilot",
+  enabled = true,
   ---@class Config
   ---@field max_completions integer Maximum number of completions to show
   ---@field max_attempts? integer Maximum number of attempts to fetch completions

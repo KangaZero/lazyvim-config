@@ -13,7 +13,6 @@ map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-
 -- Move to window using the <ctrl> hjkl keys
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
@@ -261,6 +260,7 @@ vim.keymap.set({ "i", "n" }, "<shift>", function()
   require("blink.cmp").show()
 end, { desc = "Show completion options" })
 
+vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename variable (globally)" })
 -- Mini map
 vim.keymap.set("n", "<leader>um", function()
   require("mini.map").toggle()
