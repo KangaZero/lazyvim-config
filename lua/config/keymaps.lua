@@ -294,12 +294,16 @@ wk.add({
   { "<leader>m", icon = "󰦝 " },
 })
 
--- Move lines up/down
+-- Move lines up/down (count-aware: 3<A-j> moves 3 lines)
 -- INFO: alt + j/k does not work on Mac
-vim.keymap.set({ "n", "v", "i" }, "<A-j>", "<cmd>m .+1<cr>", { desc = "Move line down" })
-vim.keymap.set({ "n", "v", "i" }, "<A-Down>", "<cmd>m .+1<cr>", { desc = "Move line down" })
-vim.keymap.set({ "n", "v", "i" }, "<A-k>", "<cmd>m .-2<cr>", { desc = "Move line up" })
-vim.keymap.set({ "n", "v", "i" }, "<A-Up>", "<cmd>m .-2<cr>", { desc = "Move line up" })
+map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move line down" })
+map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move line up" })
+map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
+map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up" })
+map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move line down" })
+map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move line up" })
+map("n", "<A-Down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move line down" })
+map("n", "<A-Up>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move line up" })
 
 --WARNING: Disabling minty as it is not keyboard friendly
 -- require("minty.huefy").open()

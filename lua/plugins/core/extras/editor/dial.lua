@@ -67,6 +67,12 @@ return {
       cyclic = true,
     })
 
+    local weekdays_abbr = augend.constant.new({
+      elements = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
+      word = true,
+      cyclic = true,
+    })
+
     local months = augend.constant.new({
       elements = {
         "January",
@@ -118,6 +124,7 @@ return {
           augend.date.alias["%Y/%m/%d"], -- date (2022/02/19, etc.)
           ordinal_numbers,
           weekdays,
+          weekdays_abbr,
           months,
           capitalized_boolean,
           augend.constant.alias.bool, -- boolean value (true <-> false)

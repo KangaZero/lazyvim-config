@@ -121,6 +121,9 @@ opt.wrap = false -- Disable line wrap
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 
+-- Ensure node is findable by LSP child processes (versioned Homebrew path not in default env)
+vim.env.PATH = "/opt/homebrew/opt/node@24/bin:" .. vim.env.PATH
+
 -- Personal overrides -------------------------------------------------------
 
 vim.g.lazyvim_eslint_auto_format = true
