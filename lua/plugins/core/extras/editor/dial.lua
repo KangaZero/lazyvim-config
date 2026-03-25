@@ -24,7 +24,6 @@ return {
   },
   opts = function()
     local augend = require("dial.augend")
-
     local logical_alias = augend.constant.new({
       elements = { "&&", "||" },
       word = false,
